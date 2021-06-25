@@ -56,4 +56,23 @@ router.post('/', function (req, res) {
   })
 })
 
+router.delete('/:id', (req, res) => {
+  let deleteMovie = req.params.id
+  let newMovies = movies.filter(movie => {
+    return movie.id !== Number(deleteMovie)
+  })
+  if(newMovies.length === movies.length) {
+    res.status(404).send("Movie not found, no movie deleted")
+  } else {
+  fs.writeFile('./routes/movies.json', JSON.stringify(newMovies), (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.status(200)
+        .send('Movie deleted')
+    }
+   })
+  }
+})
+
 module.exports = router;
